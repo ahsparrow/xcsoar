@@ -41,7 +41,8 @@ enum ControlIndex {
   WatchedWaypointFile,
   AirspaceFile,
   AdditionalAirspaceFile,
-  AirfieldFile
+  AirfieldFile,
+  VoiceFile
 };
 
 class SiteConfigPanel final : public RowFormWidget {
@@ -104,6 +105,11 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
             "information about individual waypoints and airfields."),
           ProfileKeys::AirfieldFile, _T("*.txt\0"));
   SetExpertRow(AirfieldFile);
+
+  AddFileReader(_("Voice messages"),
+                _("The file contains sound files for voice messages."),
+                ProfileKeys::VoiceFile, _T("*.zip\0"));
+  SetExpertRow(VoiceFile);
 }
 
 bool
@@ -123,8 +129,11 @@ SiteConfigPanel::Save(bool &_changed)
 
   AirfieldFileChanged = SaveValueFileReader(AirfieldFile, ProfileKeys::AirfieldFile);
 
+  VoiceFileChanged =
+      SaveValueFileReader(VoiceFile, ProfileKeys::VoiceFile);
 
-  changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged;
+  changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||
+            VoiceFileChanged;
 
   _changed |= changed;
 

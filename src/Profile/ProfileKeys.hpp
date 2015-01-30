@@ -62,6 +62,7 @@ extern const char WatchedWaypointFile[];
 extern const char AirspaceFile[];
 extern const char AdditionalAirspaceFile[];
 extern const char AirfieldFile[];
+extern const char VoiceFile[];
 extern const char PolarFile[];
 extern const char LanguageFile[];
 extern const char InputFile[];
