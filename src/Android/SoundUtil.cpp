@@ -28,6 +28,8 @@ Copyright_License {
 namespace SoundUtil {
   static Java::TrivialClass cls;
   static jmethodID play_method;
+  static jmethodID play_voice_method;
+  static jmethodID set_voice_file_method;
 }
 
 void
@@ -40,6 +42,12 @@ SoundUtil::Initialise(JNIEnv *env)
   play_method = env->GetStaticMethodID(cls, "play",
                                        "(Landroid/content/Context;"
                                        "Ljava/lang/String;)Z");
+  play_voice_method = env->GetStaticMethodID(cls, "playVoice",
+                                             "(Landroid/content/Context;"
+                                             "Ljava/lang/String;)Z");
+  set_voice_file_method = env->GetStaticMethodID(cls, "setVoiceFile",
+                                                "(Landroid/content/Context;"
+                                                "Ljava/lang/String;)Z");
 }
 
 void
@@ -53,5 +61,21 @@ SoundUtil::Play(JNIEnv *env, jobject context, const char *name)
 {
   Java::String paramName(env, name);
   return env->CallStaticBooleanMethod(cls, play_method, context,
+                                      paramName.Get());
+}
+
+bool
+SoundUtil::PlayVoice(JNIEnv *env, jobject context, const char *name)
+{
+  Java::String paramName(env, name);
+  return env->CallStaticBooleanMethod(cls, play_voice_method, context,
+                                      paramName.Get());
+}
+
+bool
+SoundUtil::SetVoiceFile(JNIEnv *env, jobject context, const char *path)
+{
+  Java::String paramName(env, path);
+  return env->CallStaticBooleanMethod(cls, set_voice_file_method, context,
                                       paramName.Get());
 }
