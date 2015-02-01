@@ -31,6 +31,8 @@ namespace SoundUtil {
   void Deinitialise(JNIEnv *env);
 
   bool Play(JNIEnv *env, jobject context, const char *name);
+  bool PlayVoice(JNIEnv *env, jobject context, const char *name);
+  bool SetVoiceFile(JNIEnv *env, jobject context, const char *path);
 };
 
 #endif

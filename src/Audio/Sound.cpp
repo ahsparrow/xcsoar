@@ -56,3 +56,23 @@ PlayResource(const TCHAR *resource_name)
   return false;
 #endif
 }
+
+bool
+PlayVoice(const TCHAR *voice_name)
+{
+#ifdef ANDROID
+  return SoundUtil::PlayVoice(Java::GetEnv(), context->Get(), voice_name);
+#else
+  return false;
+#endif
+}
+
+bool
+SetVoiceFile(const TCHAR *path)
+{
+#ifdef ANDROID
+  return SoundUtil::SetVoiceFile(Java::GetEnv(), context->Get(), path);
+#else
+  return false;
+#endif
+}

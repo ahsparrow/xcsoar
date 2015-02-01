@@ -27,5 +27,7 @@ Copyright_License {
 #include <tchar.h>
 
 bool PlayResource(const TCHAR *resource_name);
+bool PlayVoice(const TCHAR *voice_name);
+bool SetVoiceFile(const TCHAR *path);
 
 #endif
