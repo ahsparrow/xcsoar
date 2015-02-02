@@ -227,6 +227,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmComputer.cpp \
 	$(SRC)/FLARM/Global.cpp \
 	$(SRC)/FLARM/Glue.cpp \
+	$(SRC)/FLARM/Status.cpp \
 	$(SRC)/Computer/CuComputer.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
