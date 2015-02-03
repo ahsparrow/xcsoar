@@ -147,8 +147,10 @@ SiteConfigPanel::Save(bool &_changed)
 
   AirfieldFileChanged = SaveValueFileReader(AirfieldFile, ProfileKeys::AirfieldFile);
 
+#ifdef ANDRIOD
   VoiceFileChanged =
       SaveValueFileReader(VoiceFile, ProfileKeys::VoiceFile);
+#endif
 
   changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||
             VoiceFileChanged;
