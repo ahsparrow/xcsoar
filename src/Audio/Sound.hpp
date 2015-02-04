@@ -29,5 +29,7 @@ Copyright_License {
 bool PlayResource(const TCHAR *resource_name);
 bool PlayVoice(const TCHAR *voice_name);
 bool SetVoiceFile(const TCHAR *path);
+void MuteSound(bool flag);
+bool IsSoundMute(void);
 
 #endif

@@ -40,6 +40,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Net/Features.hpp"
 #include "UIState.hpp"
+#include "Audio/Sound.hpp"
 
 #include <stdlib.h>
 
@@ -635,6 +636,10 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     page.MakeTitle(CommonInterface::GetUISettings().info_boxes, label, true);
     ReplaceInString(OutBuffer, _T("$(NextPageName)"), label, Size);
   }
+
+  CondReplaceInString(IsSoundMute(), OutBuffer,
+                      _T("$(MuteToggleActionName)"),
+                      _T("Off"), _T("On"), Size);
 
   return invalid;
 }
