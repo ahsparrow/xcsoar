@@ -122,7 +122,7 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                 ProfileKeys::AirfieldFile, _T("*.txt\0"));
   SetExpertRow(AirfieldFile);
 
-#ifdef ANDRIOD
+#ifdef ANDROID
   AddFileReader(_("Voice messages"),
                 _("The file contains sound files for voice messages."),
                 ProfileKeys::VoiceFile, _T("*.zip\0"));
@@ -147,7 +147,7 @@ SiteConfigPanel::Save(bool &_changed)
 
   AirfieldFileChanged = SaveValueFileReader(AirfieldFile, ProfileKeys::AirfieldFile);
 
-#ifdef ANDRIOD
+#ifdef ANDROID
   VoiceFileChanged =
       SaveValueFileReader(VoiceFile, ProfileKeys::VoiceFile);
 #endif
