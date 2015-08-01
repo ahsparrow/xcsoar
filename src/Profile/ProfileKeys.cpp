@@ -80,6 +80,7 @@ const char AcknowledgementTime[] = "AcknowledgementTime";
 const char AirfieldFile[] = "AirfieldFile"; // pL
 const char AirspaceFile[] = "AirspaceFile"; // pL
 const char AdditionalAirspaceFile[] = "AdditionalAirspaceFile"; // pL
+const char VoiceFile[] = "VoiceFile";
 const char PolarFile[] = "PolarFile"; // pL
 const char WaypointFile[] = "WPFile"; // pL
 const char AdditionalWaypointFile[] = "AdditionalWPFile"; // pL

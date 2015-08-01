@@ -35,9 +35,14 @@ Copyright_License {
 #include <mmsystem.h>
 #endif
 
+static bool mute = false;
+
 bool
 PlayResource(const TCHAR *resource_name)
 {
+  if (mute)
+    return true;
+
 #ifdef ANDROID
 
   return SoundUtil::Play(Java::GetEnv(), context->Get(), resource_name);
@@ -55,4 +60,39 @@ PlayResource(const TCHAR *resource_name)
 #else
   return false;
 #endif
+}
+
+bool
+PlayVoice(const TCHAR *voice_name)
+{
+  if (mute)
+    return true;
+
+#ifdef ANDROID
+  return SoundUtil::PlayVoice(Java::GetEnv(), context->Get(), voice_name);
+#else
+  return false;
+#endif
+}
+
+bool
+SetVoiceFile(const TCHAR *path)
+{
+#ifdef ANDROID
+  return SoundUtil::SetVoiceFile(Java::GetEnv(), context->Get(), path);
+#else
+  return false;
+#endif
+}
+
+void
+MuteSound(bool flag)
+{
+  mute = flag;
+}
+
+bool
+IsSoundMute(void)
+{
+  return mute;
 }

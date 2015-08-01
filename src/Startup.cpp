@@ -74,6 +74,7 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointGlue.hpp"
+#include "Audio/Sound.hpp"
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -378,6 +379,11 @@ Startup()
 
   AudioVarioGlue::Initialise();
   AudioVarioGlue::Configure(ui_settings.sound.vario);
+
+  // Initialise voice file path
+  char voicePath[MAX_PATH];
+  Profile::GetPath(ProfileKeys::VoiceFile, voicePath);
+  SetVoiceFile(voicePath);
 
   // Start the device thread(s)
   operation.SetText(_("Starting devices"));
