@@ -30,6 +30,9 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Scanner;
 import android.util.Log;
 import android.util.DisplayMetrics;
 import android.app.Activity;
@@ -37,7 +40,9 @@ import android.view.MotionEvent;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+import android.view.InputDevice;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.net.Uri;
 import android.content.Intent;
@@ -66,6 +71,7 @@ class NativeView extends SurfaceView
   Resources resources;
 
   final boolean hasKeyboard;
+  HashMap<Integer, HashMap<Integer, Integer>> keymaps;
 
   EGL10 egl;
   EGLDisplay display;
@@ -91,6 +97,8 @@ class NativeView extends SurfaceView
 
     hasKeyboard = resources.getConfiguration().keyboard !=
       Configuration.KEYBOARD_NOKEYS;
+
+    keymaps = new HashMap<Integer, HashMap<Integer, Integer>>();
 
     touchInput = DifferentTouchInput.getInstance();
 
@@ -426,7 +434,10 @@ class NativeView extends SurfaceView
   public void exitApp() {
   }
 
-  private final int translateKeyCode(int keyCode) {
+  /**
+   * Translate physical keycode to XCSoar "logical" keycode
+   */
+  private final int translateKeyCode(int keyCode, final KeyEvent event) {
     if (!hasKeyboard) {
       /* map the volume keys to cursor up/down if the device has no
          hardware keys */
@@ -440,16 +451,79 @@ class NativeView extends SurfaceView
       }
     }
 
-    return keyCode;
+    /* Get key map for keyboard */
+    int deviceId = event.getDeviceId();
+    HashMap<Integer, Integer> keymap = keymaps.get(deviceId);
+    if (keymap == null) {
+      /* Not seen this keyboard before, so attempt to create a keymap */
+      keymap = setKeymap(deviceId);
+    }
+
+    /* Do the key mapping */
+    Integer kc = keymap.get(keyCode);
+    if (kc == null) {
+      kc = keyCode;
+    }
+
+    return kc;
+  }
+
+  /**
+   * Load keymap file from external storage
+   */
+  private final HashMap<Integer, Integer> setKeymap(int deviceId) {
+    InputDevice dev = InputDevice.getDevice(deviceId);
+    String devName = dev.getName();
+    Log.d(TAG,
+          "Creating keymap for device: " + deviceId + ", " + devName);
+
+    HashMap<Integer, Integer> keymap = new HashMap<Integer, Integer>();
+    keymaps.put(deviceId, keymap);
+
+    /* TBD - This probably doesn't work for Samsung devices */
+    File dir = Environment.getExternalStoragePublicDirectory("XCSoarData");
+    File file = new File(dir, devName + ".kmap");
+
+    /* Read pairs of keycode strings from file */
+    try {
+      Scanner scanner = new Scanner(file);
+      while (scanner.hasNext()) {
+        String keyIn = scanner.next();
+        String keyOut = scanner.next();
+
+        int keycodeIn = KeyEvent.keyCodeFromString(keyIn);
+        if (keycodeIn ==KeyEvent.KEYCODE_UNKNOWN) {
+          Log.w(TAG, "Unrecognised keycode: " + keyIn + ", for " + devName);
+          break;
+        }
+
+        int keycodeOut = KeyEvent.keyCodeFromString(keyOut);
+        if (keycodeOut ==KeyEvent.KEYCODE_UNKNOWN) {
+          Log.w(TAG, "Unrecognised keycode: " + keyOut + ", for " + devName);
+          break;
+        }
+
+        keymap.put(keycodeIn, keycodeOut);
+      }
+      scanner.close();
+    }
+    catch (FileNotFoundException e) {
+    }
+
+    if (keymap.isEmpty()) {
+      Log.d(TAG, "No key map found for: " + devName);
+    }
+
+    return keymap;
   }
 
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
-    EventBridge.onKeyDown(translateKeyCode(keyCode));
+    EventBridge.onKeyDown(translateKeyCode(keyCode, event));
     return true;
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
-    EventBridge.onKeyUp(translateKeyCode(keyCode));
+    EventBridge.onKeyUp(translateKeyCode(keyCode, event));
     return true;
   }
 
