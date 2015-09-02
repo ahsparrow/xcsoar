@@ -71,18 +71,22 @@ ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, fixed clock)
 void
 ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock)
 {
-  flarm.available.Update(clock);
+  FlarmStatus status;
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  flarm.rx = line.Read(0);
-  flarm.tx = line.Read(false);
-  flarm.gps = (FlarmStatus::GPSStatus)
+  status.rx = line.Read(0);
+  status.tx = line.Read(false);
+  status.gps = (FlarmStatus::GPSStatus)
     line.Read((int)FlarmStatus::GPSStatus::NONE);
 
   line.Skip();
-  flarm.alarm_level = (FlarmTraffic::AlarmType)
+  status.alarm_level = (FlarmTraffic::AlarmType)
     line.Read((int)FlarmTraffic::AlarmType::NONE);
+
+  int bearing = line.Read(0);
+
+  flarm.Update(status, bearing, clock);
 }
 
 /**

@@ -90,6 +90,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Audio/Sound.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -679,4 +680,15 @@ void
 InputEvents::eventFileManager(const TCHAR *misc)
 {
   ShowFileManager();
+}
+
+void
+InputEvents::eventMute(const TCHAR *misc)
+{
+  if (StringIsEqual(misc, _T("on")))
+    MuteSound(true);
+  else if (StringIsEqual(misc, _T("off")))
+    MuteSound(false);
+  else if (StringIsEqual(misc, _T("toggle")))
+    MuteSound(!IsSoundMute());
 }
