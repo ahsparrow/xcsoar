@@ -224,7 +224,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
   // by the DrawArrow() function again
   size = size * 100 / Layout::Scale(100);
 
-  auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
+  auto angle = info.wind.bearing;
 
   const int length =
     std::min(size, std::max(10u, uround(Quadruple(info.wind.norm))));
