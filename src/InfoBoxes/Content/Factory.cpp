@@ -166,7 +166,7 @@ static constexpr MetaData meta_data[] = {
     N_("This is the altitude above mean sea level reported by the GPS. Touch-screen/PC only: In simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."),
     IBFHelper<InfoBoxContentAltitudeGPS>::Create,
     e_HeightAGL, // H AGL
-    e_FlightLevel, // Flight Level
+    e_Barogram,
   },
 
   // e_HeightAGL
@@ -503,7 +503,7 @@ static constexpr MetaData meta_data[] = {
     N_("This is the barometric altitude obtained from a device equipped with a pressure sensor."),
     UpdateInfoBoxAltitudeBaro,
     altitude_infobox_panels,
-    e_H_QFE, // H T/O
+    e_Barogram,
     e_H_Terrain, // Terr Elev
   },
 
@@ -882,7 +882,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxAltitudeQFE,
     altitude_infobox_panels,
     e_FlightLevel, // Flight Level
-    e_H_Baro, // Alt Baro
+    NavAltitude,
   },
 
   // e_GR_Avg
@@ -963,7 +963,7 @@ static constexpr MetaData meta_data[] = {
     N_("Pressure Altitude given as Flight Level. Only available if barometric altitude available and correct QNH set."),
     UpdateInfoBoxAltitudeFlightLevel,
     altitude_infobox_panels,
-    e_Barogram, // Barogram
+    NavAltitude,
     e_H_QFE, // H T/O
   },
 
@@ -974,7 +974,7 @@ static constexpr MetaData meta_data[] = {
     N_("Trace of altitude during flight"),
     IBFHelper<InfoBoxContentBarogram>::Create,
     e_HeightGPS, // H GPS
-    e_FlightLevel, // Flight level
+    e_H_Baro,
   },
 
   // e_Vario_spark
@@ -1126,8 +1126,8 @@ static constexpr MetaData meta_data[] = {
     N_("This is the barometric altitude obtained from a device equipped with a pressure sensor or the GPS altitude if the barometric altitude is not available."),
     UpdateInfoBoxAltitudeNav,
     altitude_infobox_panels,
-    NavAltitude,
-    NavAltitude,
+    e_H_QFE,
+    e_FlightLevel,
   },
 
   // NextLegEqThermal
