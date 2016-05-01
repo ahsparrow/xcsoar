@@ -193,17 +193,23 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     const bool next_is_final = common_stats.next_is_last;
     const bool previous_is_start = common_stats.previous_is_first;
     const bool has_optional_starts = ordered_task_stats.has_optional_starts;
+    const bool task_finished = task_manager->GetOrderedTask().TaskFinished();
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       // Waypoint\nNext
-      if (!common_stats.active_has_next)
-        invalid = true;
+      if (task_finished) {
+        ReplaceInString(OutBuffer, _T("$(WaypointNext)"),
+                                   _("Restart Task"), Size);
+      } else {
+        CondReplaceInString(next_is_final,
+                            OutBuffer,
+                            _T("$(WaypointNext)"),
+                            _("Finish Turnpoint"),
+                            _("Next Turnpoint"), Size);
 
-      CondReplaceInString(next_is_final,
-                          OutBuffer,
-                          _T("$(WaypointNext)"),
-                          _("Finish Turnpoint"),
-                          _("Next Turnpoint"), Size);
+        if (!common_stats.active_has_next)
+          invalid = true;
+      }
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
 
@@ -229,13 +235,19 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       case TaskAdvance::AUTO:
       case TaskAdvance::START_ARMED:
       case TaskAdvance::TURN_ARMED:
-        CondReplaceInString(next_is_final,
-                            OutBuffer,
-                            _T("$(WaypointNextArm)"),
-                            _("Finish Turnpoint"),
-                            _("Next Turnpoint"), Size);
-        if (!common_stats.active_has_next)
-          invalid = true;
+        if (task_finished) {
+          ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"),
+                                       _("Restart Task"), Size);
+        } else {
+          CondReplaceInString(next_is_final,
+                              OutBuffer,
+                              _T("$(WaypointNextArm)"),
+                              _("Finish Turnpoint"),
+                              _("Next Turnpoint"), Size);
+
+          if (!common_stats.active_has_next)
+            invalid = true;
+        }
         break;
       case TaskAdvance::START_DISARMED:
         ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"), _("Arm start"), Size);
