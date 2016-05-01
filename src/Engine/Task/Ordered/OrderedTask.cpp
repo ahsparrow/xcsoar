@@ -885,12 +885,18 @@ OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
 void
 OrderedTask::SetActiveTaskPoint(unsigned index)
 {
-  if (index >= task_points.size() || index == active_task_point)
+  if (index > task_points.size() || index == active_task_point)
     return;
 
-  task_advance.SetArmed(false);
-  active_task_point = index;
-  force_full_update = true;
+  if (index == task_points.size()) {
+    // Special case - setting the index past the finish point "wraps" the
+    // task back to the beginning
+    Reset();
+  } else {
+    task_advance.SetArmed(false);
+    active_task_point = index;
+    force_full_update = true;
+  }
 }
 
 TaskWaypoint*

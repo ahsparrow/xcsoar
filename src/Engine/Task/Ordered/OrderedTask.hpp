@@ -654,6 +654,10 @@ public:
     name.clear();
   }
 
+  bool TaskFinished() const {
+    return stats.task_finished;
+  }
+
 public:
   /* virtual methods from class TaskInterface */
   unsigned TaskSize() const override {
