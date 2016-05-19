@@ -24,11 +24,17 @@ Copyright_License {
 package org.xcsoar;
 
 import java.util.HashMap;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import android.media.MediaPlayer;
 import android.content.Context;
 
 public class SoundUtil {
-  private static HashMap<String, Integer> resources = new HashMap();
+  private static HashMap<String, Integer> resources = new HashMap<String, Integer>();
 
   static {
     resources.put("IDR_FAIL", R.raw.fail);
@@ -49,6 +55,64 @@ public class SoundUtil {
       return false;
 
     mp.start();
+    return true;
+  }
+
+  private static MediaPlayer voiceMediaPlayer = new MediaPlayer();
+  private static ZipFile voiceZipFile = null;
+
+  public static boolean playVoice(Context context, String name) {
+    if (voiceZipFile == null)
+      return false;
+
+    // Extract zipped ogg file to temporary file
+    File tmpFile;
+    try {
+      String entryName = name + ".ogg";
+
+      ZipEntry entry = voiceZipFile.getEntry(entryName);
+      if (entry == null)
+        return false;
+
+      InputStream in = voiceZipFile.getInputStream(entry);
+
+      tmpFile = new File(context.getCacheDir(), entryName);
+      FileOutputStream out = new FileOutputStream(tmpFile);
+
+      int count;
+      byte[] buffer = new byte[1024];
+      while ((count = in.read(buffer)) != -1) 
+      {
+        out.write(buffer, 0, count);
+      }
+
+      in.close();
+      out.close();
+    } catch (IOException ex) {
+      return false;
+    }
+
+    // Set media player to play temporary file
+    voiceMediaPlayer.reset();
+    try {
+      voiceMediaPlayer.setDataSource(tmpFile.getAbsolutePath());
+      voiceMediaPlayer.prepare();
+    } catch (IOException ex) {
+      return false;
+    }
+
+    voiceMediaPlayer.start();
+    return true;
+  }
+
+  public static boolean setVoiceFile(Context context, String path) {
+    try {
+      voiceZipFile = new ZipFile(path);
+    } catch (IOException ex) {
+      voiceZipFile = null;
+      return false;
+    }
+
     return true;
   }
 }

@@ -65,6 +65,8 @@ struct FlarmStatus {
   void Expire(fixed clock) {
     available.Expire(clock, fixed(10));
   }
+
+  void Update(const FlarmStatus &status, int bearing, fixed clock);
 };
 
 static_assert(std::is_trivial<FlarmStatus>::value, "type is not trivial");

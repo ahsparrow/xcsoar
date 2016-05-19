@@ -55,6 +55,9 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "PageActions.hpp"
+#include "Profile/Profile.hpp"
+#include "Audio/Sound.hpp"
+#include <windef.h>
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -66,6 +69,7 @@ bool AirspaceFileChanged = false;
 bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
 bool InputFileChanged = false;
+bool VoiceFileChanged = false;
 bool LanguageChanged = false;
 bool require_restart;
 
@@ -82,6 +86,7 @@ SettingsEnter()
   AirfieldFileChanged = false;
   WaypointFileChanged = false;
   InputFileChanged = false;
+  VoiceFileChanged = false;
   DevicePortChanged = false;
   LanguageChanged = false;
   require_restart = false;
@@ -184,6 +189,12 @@ SettingsLeave(const UISettings &old_ui_settings)
     ReadAirspace(airspace_database, terrain,
                  CommonInterface::GetComputerSettings().pressure,
                  operation);
+  }
+
+  if (VoiceFileChanged) {
+    char path[MAX_PATH];
+    Profile::GetPath(ProfileKeys::VoiceFile, path);
+    SetVoiceFile(path);
   }
 
   if (DevicePortChanged)
