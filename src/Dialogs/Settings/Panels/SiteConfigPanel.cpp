@@ -107,9 +107,9 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(AirfieldFile);
 
 #ifdef ANDROID
-  AddFileReader(_("Voice messages"),
-                _("The file contains sound files for voice messages."),
-                ProfileKeys::VoiceFile, _T("*.zip\0"));
+  AddFile(_("Voice messages"),
+          _("The file contains sound files for voice messages."),
+          ProfileKeys::VoiceFile, _T("*.zip\0"));
   SetExpertRow(VoiceFile);
 #endif
 }
