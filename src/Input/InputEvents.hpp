@@ -184,6 +184,7 @@ namespace InputEvents
   void eventQuickMenu(const TCHAR *misc);
   void eventFileManager(const TCHAR *misc);
   void eventMute(const TCHAR *misc);
+  void eventResetTask(const TCHAR *misc);
 
   // -------
 };
