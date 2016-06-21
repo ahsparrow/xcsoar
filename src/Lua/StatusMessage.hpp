@@ -21,44 +21,16 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_STATUS_MESSAGE_H
-#define XCSOAR_STATUS_MESSAGE_H
+#ifndef XCSOAR_LUA_STATUSMESSAGE_HPP
+#define XCSOAR_LUA_STATUSMESSAGE_HPP
 
-#include "Compiler.h"
+struct lua_State;
 
-#include <tchar.h>
-
-/**
- * Struct used to store status message items
- */
-struct StatusMessage {
-  /** English key */
-  const TCHAR *key;
-
-  /** What sound entry to play */
-  const TCHAR *sound;
-
-  bool visible;
-
-  /** Delay for DoStatusMessage */
-  unsigned delay_ms;
-};
-
-gcc_pure
-const StatusMessage &
-FindStatusMessage(const TCHAR *key);
-
-bool
-SetStatusMessage(const TCHAR *key, const TCHAR *sound, bool visible,
-                 unsigned delay_ms);
-
-void
-ResetStatusMessage();
-
-int
-SizeStatusMessage();
-
-int
-MaxSizeStatusMessage();
+namespace Lua {
+  /**
+   * Provide the Lua table "xcsoar.statusmessage".
+   */
+  void InitStatusMessage(lua_State *L);
+}
 
 #endif
