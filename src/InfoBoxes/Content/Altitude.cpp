@@ -78,13 +78,19 @@ UpdateInfoBoxAltitudeNav(InfoBoxData &data)
   const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
 
   if (basic.baro_altitude_available &&
-      settings_computer.features.nav_baro_altitude_enabled)
+      settings_computer.features.nav_baro_altitude_enabled) {
     data.SetTitle(InfoBoxFactory::GetCaption(InfoBoxFactory::e_H_Baro));
-  else
+
+    fixed alt = Units::ToUserUnit(basic.pressure_altitude, Unit::FEET);
+    data.UnsafeFormatValue(_T("FL%02d"), iround(alt / 100));
+
+  } else {
     data.SetTitle(InfoBoxFactory::GetCaption(InfoBoxFactory::e_HeightGPS));
 
+    data.SetComment("----");
+  }
+
   data.SetValueFromAltitude(basic.nav_altitude);
-  data.SetCommentFromAlternateAltitude(basic.nav_altitude);
 }
 
 void
