@@ -82,12 +82,10 @@ UpdateInfoBoxAltitudeNav(InfoBoxData &data)
     data.SetTitle(InfoBoxFactory::GetCaption(InfoBoxFactory::e_H_Baro));
 
     fixed alt = Units::ToUserUnit(basic.pressure_altitude, Unit::FEET);
-    data.UnsafeFormatValue(_T("FL%02d"), iround(alt / 100));
+    data.UnsafeFormatComment(_T("FL%02d"), iround(alt / 100));
 
   } else {
     data.SetTitle(InfoBoxFactory::GetCaption(InfoBoxFactory::e_HeightGPS));
-
-    data.SetComment("----");
   }
 
   data.SetValueFromAltitude(basic.nav_altitude);
