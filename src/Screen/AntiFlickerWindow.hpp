@@ -26,7 +26,7 @@ Copyright_License {
 
 #if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
 
-#include "PaintWindow.hpp"
+#include "FakeBufferWindow.hpp"
 
 /**
  * A #PaintWindow implementation that avoids flickering.  Some
@@ -40,22 +40,7 @@ Copyright_License {
  * redraws when this is expensive.  Use it only when flicker avoidance
  * is the goal.
  */
-class AntiFlickerWindow : public PaintWindow {
-protected:
-  /**
-   * Determines whether this class maintains a persistent buffer which
-   * allows incremental drawing in each frame.
-   */
-  static constexpr bool IsPersistent() {
-    return false;
-  }
-
-  virtual void OnPaintBuffer(Canvas &canvas) = 0;
-
-  /* virtual methods from class Window */
-  void OnPaint(Canvas &canvas) override {
-    OnPaintBuffer(canvas);
-  }
+class AntiFlickerWindow : public FakeBufferWindow {
 };
 
 #else

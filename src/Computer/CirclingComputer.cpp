@@ -160,6 +160,10 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     if (!force_circling)
       break;
 
+#if GCC_CHECK_VERSION(7,0)
+    [[fallthrough]];
+#endif
+
   case CirclingMode::POSSIBLE_CLIMB:
     if (force_cruise) {
       circling_info.turn_mode = CirclingMode::CRUISE;
@@ -201,6 +205,10 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     if (!force_cruise)
       break;
 
+#if GCC_CHECK_VERSION(7,0)
+    [[fallthrough]];
+#endif
+
   case CirclingMode::POSSIBLE_CRUISE:
     if (force_circling) {
       circling_info.turn_mode = CirclingMode::CLIMB;
@@ -231,6 +239,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
 
 void
 CirclingComputer::PercentCircling(const MoreData &basic,
+                                  const FlyingState &flight,
                                   CirclingInfo &circling_info)
 {
   if (!basic.time_available)
@@ -244,16 +253,20 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   if (!positive(dt))
     return;
 
+  // don't increment the accumulators unless actually flying
+  if (!flight.flying)
+    return;
+
   // if (Circling)
   if (circling_info.circling && circling_info.turning) {
-    // Add one second to the circling time
+    // Add time step to the circling time
     // timeCircling += (Basic->Time-LastTime);
     circling_info.time_climb += dt;
 
     // Add the Vario signal to the total climb height
-    circling_info.total_height_gain += basic.gps_vario;
+    circling_info.total_height_gain += basic.gps_vario * dt;
   } else {
-    // Add one second to the cruise time
+    // Add time step to the cruise time
     // timeCruising += (Basic->Time-LastTime);
     circling_info.time_cruise += dt;
   }

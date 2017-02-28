@@ -319,6 +319,9 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
   const NMEAInfo &basic = CommonInterface::Basic();
   const Waypoint* wp = NULL;
 
+  bool allow_navigation = true;
+  bool allow_edit = true;
+
   if (StringIsEqual(misc, _T("current"))) {
     if (protected_task_manager == NULL)
       return;
@@ -328,11 +331,18 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
       Message::AddMessage(_("No active waypoint!"));
       return;
     }
+
+    /* due to a code limitation, we can't currently manipulate
+       Waypoint instances taken from the task, because it would
+       require updating lots of internal task state, and the waypoint
+       editor doesn't know how to do that */
+    allow_navigation = false;
+    allow_edit = false;
   } else if (StringIsEqual(misc, _T("select"))) {
     wp = ShowWaypointListDialog(basic.location);
   }
   if (wp)
-    dlgWaypointDetailsShowModal(*wp);
+    dlgWaypointDetailsShowModal(*wp, allow_navigation, allow_edit);
 }
 
 void
@@ -551,7 +561,7 @@ InputEvents::eventRun(const TCHAR *misc)
 {
   #ifdef WIN32
   PROCESS_INFORMATION pi;
-  if (!::CreateProcess(misc, NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi))
+  if (!::CreateProcess(misc, NULL, NULL, NULL, false, 0, NULL, NULL, NULL, &pi))
     return;
 
   // wait for program to finish!

@@ -57,6 +57,7 @@ const char TerrainContours[] = "TerrainContours";
 const char DrawTopography[] = "DrawTopology";
 const char FinalGlideTerrain[] = "FinalGlideTerrain";
 const char AutoWind[] = "AutoWind";
+const char ExternalWind[] = "ExternalWind";
 const char HomeWaypoint[] = "HomeWaypoint";
 const char HomeLocation[] = "HomeLocation";
 const char LiftUnitsValue[] = "LiftUnit";
@@ -254,6 +255,10 @@ const char SkyLinesTrackingInterval[] = "SkyLinesTrackingInterval";
 const char SkyLinesTrafficEnabled[] = "SkyLinesTrafficEnabled";
 const char SkyLinesNearTrafficEnabled[] = "SkyLinesNearTrafficEnabled";
 const char SkyLinesTrackingKey[] = "SkyLinesTrackingKey";
+
+const char CloudEnabled[] = "CloudEnabled";
+const char CloudKey[] = "CloudKey";
+
 const char LiveTrack24Enabled[] = "LiveTrack24Enabled";
 const char LiveTrack24Server[] = "LiveTrack24Server";
 const char LiveTrack24Username[] = "LiveTrack24Username";

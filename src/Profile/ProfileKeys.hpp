@@ -77,6 +77,7 @@ extern const char SlopeShadingType[];
 extern const char TerrainContours[];
 extern const char FinalGlideTerrain[];
 extern const char AutoWind[];
+extern const char ExternalWind[];
 extern const char AirspaceWarning[];
 extern const char AirspaceWarningDialog[];
 extern const char AirspaceBlackOutline[];
@@ -251,6 +252,10 @@ extern const char SkyLinesTrackingInterval[];
 extern const char SkyLinesTrafficEnabled[];
 extern const char SkyLinesNearTrafficEnabled[];
 extern const char SkyLinesTrackingKey[];
+
+extern const char CloudEnabled[];
+extern const char CloudKey[];
+
 extern const char LiveTrack24Enabled[];
 extern const char LiveTrack24Server[];
 extern const char LiveTrack24Username[];
