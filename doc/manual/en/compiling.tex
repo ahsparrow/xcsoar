@@ -16,7 +16,7 @@ The XCSoar source code is managed with
 following command:
 
 \begin{verbatim*}
-git clone git://git.xcsoar.org/xcsoar/master/xcsoar.git
+git clone git://github.com/XCSoar/XCSoar
 \end{verbatim*}
 
 To update your repository, type:
@@ -47,6 +47,7 @@ The following is needed for all targets:
 \item \href{http://librsvg.sourceforge.net/)}{rsvg}
 \item \href{http://www.imagemagick.org/}{ImageMagick 6.4}
 \item \href{http://xmlsoft.org/XSLT/xsltproc2.html}{xsltproc}
+\item \href{http://www.info-zip.org/}{Info-ZIP}
 \item Perl and XML::Parser
 \end{itemize}
 
@@ -55,7 +56,7 @@ The following command installs these on Debian:
 \begin{verbatim*}
 apt-get install make \
   librsvg2-bin xsltproc \
-  imagemagick gettext
+  imagemagick gettext zip
 \end{verbatim*}
 
 \section{Target-specific Build Instructions}
@@ -91,6 +92,8 @@ apt-get install make g++ \
   libxml-parser-perl \
   librsvg2-bin xsltproc \
   imagemagick gettext \
+  libegl1-mesa-dev \
+  libgl1-mesa-dev \
   fonts-dejavu
 \end{verbatim*}
 
@@ -120,18 +123,17 @@ For Android, you need:
 
 \begin{itemize}
 \item \href{http://developer.android.com/sdk/}{Android SDK level 22}
-\item \href{http://developer.android.com/sdk/ndk/}{Android NDK r10e}
+\item \href{http://developer.android.com/sdk/ndk/}{Android NDK r16}
 \item \href{http://www.vorbis.com/}{Ogg Vorbis}
-\item \href{http://ant.apache.org/}{Apache Ant}
-\item {Java Native tools 
+\item {Java JDK 
 \begin{verbatim*}
-sudo apt-get install gcj-native-helper ant vorbis-tools
+sudo apt-get install default-jdk-headless ant vorbis-tools
 \end{verbatim*}}
 \end{itemize}
 
 The \texttt{Makefile} assumes that the Android SDK is installed in
 \verb|~/opt/android-sdk-linux| and the NDK is installed in
-\verb|~/opt/android-ndk-r10e|.  You can use the options
+\verb|~/opt/android-ndk-r16|.  You can use the options
 \verb|ANDROID_SDK| and \verb|ANDROID_NDK| to override these paths.
 
 After installing Java you will have to install at least one Android Platform SDK using the Android SDK Manager:

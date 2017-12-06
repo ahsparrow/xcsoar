@@ -90,7 +90,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
                                                  ? hdest
                                                  : std::max(hdest, (short)3200))),
                          config, ceiling);
-    char buffer[80];
+    char buffer[128];
     sprintf(buffer,"terrain route solve, dir=%g, wind=%g, mc=%g ceiling=%d",
             (double)ang, (double)mwind, (double)mc, (int)ceiling);
     ok(retval, buffer, 0);
@@ -120,8 +120,14 @@ int main(int argc, char** argv) {
   _tcscpy(j2w_path, PathName(map_path));
   _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
 
+  RasterMap map(jp2_path);
+
   NullOperationEnvironment operation;
-  RasterMap map(jp2_path, j2w_path, NULL, operation);
+  if (!map.Load(jp2_path, j2w_path, operation)) {
+    fprintf(stderr, "failed to load map\n");
+    return EXIT_FAILURE;
+  }
+
   do {
     map.SetViewCenter(map.GetMapCenter(), fixed(100000));
   } while (map.IsDirty());
